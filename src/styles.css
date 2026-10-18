@@ -1364,10 +1364,21 @@ select {
   }
   .tab-row {
     gap: 4px;
+    padding-bottom: 10px;
+    margin-bottom: 16px;
   }
   .study-tab {
     font-size: 11px;
     padding: 0 10px;
+  }
+  .chat-panel {
+    padding: 10px;
+  }
+  .study-pet {
+    padding: 16px 14px;
+  }
+  .study-layout {
+    gap: 14px;
   }
   .topbar .avatar {
     display: none;
