@@ -15,5 +15,5 @@
 - [x] Correcciones UI: paleta de colores del modal sin desborde, pestañas con scroll horizontal, espaciado móvil
 - [x] PWA offline-first: service worker, manifest instalable, caché de interfaz + datos locales
 - [x] Fecha real del navegador en calendario y panel principal
-- [x] Ícono oficial AulaPlus (libro y lápiz) en PWA, manifest y favicon
+- [x] Logotipo oficial subido por la usuaria (libro y lápiz turquesa) en PWA, manifest y favicon
 - [ ] Publicar todo en aula-pal-buddy.lovable.app
