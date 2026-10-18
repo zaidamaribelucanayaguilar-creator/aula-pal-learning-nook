@@ -698,12 +698,21 @@ select {
   box-shadow: 0 0 0 2px var(--secondary);
 }
 .color-options {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(6, 33px);
   gap: 12px;
+  max-width: 100%;
+}
+@media (max-width: 480px) {
+  .color-options {
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
 .color-choice {
   width: 33px;
   height: 33px;
+  flex-shrink: 0;
   border-radius: 50%;
   background: var(--tone);
   border: 2px solid var(--border);
@@ -785,7 +794,17 @@ select {
   border-bottom: 1px solid var(--border);
   padding-bottom: 14px;
   margin-bottom: 24px;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.tab-row::-webkit-scrollbar {
+  height: 6px;
+}
+.tab-row::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
 }
 .study-tab {
   flex-shrink: 0;
@@ -1345,10 +1364,21 @@ select {
   }
   .tab-row {
     gap: 4px;
+    padding-bottom: 10px;
+    margin-bottom: 16px;
   }
   .study-tab {
     font-size: 11px;
     padding: 0 10px;
+  }
+  .chat-panel {
+    padding: 10px;
+  }
+  .study-pet {
+    padding: 16px 14px;
+  }
+  .study-layout {
+    gap: 14px;
   }
   .topbar .avatar {
     display: none;
