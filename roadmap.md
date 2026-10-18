@@ -12,3 +12,5 @@
 - [x] Centro de ayuda con FAQs interactivas y guías
 - [x] Calendario: fechas más legibles; paleta de colores ampliada
 - [x] Tutor híbrido: base local amplia, lectura de archivos, mapas mentales, cuestionarios, tablas
+- [x] Correcciones UI: paleta de colores del modal sin desborde, pestañas con scroll horizontal, espaciado móvil
+- [ ] PWA offline-first: service worker, manifest instalable, caché de interfaz + datos locales; publicar en aula-pal-buddy.lovable.app
