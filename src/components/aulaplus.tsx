@@ -158,6 +158,11 @@ export function AulaPlus() {
   const [mobile, setMobile] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [create, setCreate] = useState(false);
+  const [todayLabel, setTodayLabel] = useState("");
+  useEffect(() => {
+    const label = new Intl.DateTimeFormat("es-ES", { weekday: "long", day: "numeric", month: "long" }).format(new Date());
+    setTodayLabel(label.charAt(0).toUpperCase() + label.slice(1));
+  }, []);
   const [newName, setNewName] = useState("");
   const [tone, setTone] = useState("mint");
   const [species, setSpecies] = useState<PetSpecies>("monster");
