@@ -158,6 +158,11 @@ export function AulaPlus() {
   const [mobile, setMobile] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [create, setCreate] = useState(false);
+  const [todayLabel, setTodayLabel] = useState("");
+  useEffect(() => {
+    const label = new Intl.DateTimeFormat("es-ES", { weekday: "long", day: "numeric", month: "long" }).format(new Date());
+    setTodayLabel(label.charAt(0).toUpperCase() + label.slice(1));
+  }, []);
   const [newName, setNewName] = useState("");
   const [tone, setTone] = useState("mint");
   const [species, setSpecies] = useState<PetSpecies>("monster");
@@ -474,7 +479,7 @@ export function AulaPlus() {
                   </div>
                   <span className="date-chip">
                     <CalendarDays size={15} />
-                    Viernes, 9 de octubre
+                    {todayLabel}
                   </span>
                 </div>
                 <div className="welcome-band">
@@ -1161,9 +1166,12 @@ function CalendarView({
   notebooks: Notebook[];
   update: (a: Workspace["activities"]) => void;
 }) {
-  const [month, setMonth] = useState(9);
-  const [year, setYear] = useState(2026);
-  const [date, setDate] = useState("2026-10-09");
+  const [month, setMonth] = useState(() => new Date().getMonth());
+  const [year, setYear] = useState(() => new Date().getFullYear());
+  const [date, setDate] = useState(() => {
+    const t = new Date();
+    return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`;
+  });
   const [modal, setModal] = useState(false);
   const [title, setTitle] = useState("");
   const [type, setType] = useState("Examen");
