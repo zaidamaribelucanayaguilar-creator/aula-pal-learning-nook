@@ -142,3 +142,63 @@ export function StudyTools({ notebook, update, wallet, onWalletChange }: { noteb
     </div>
   );
 }
+
+function SessionResult({
+  score,
+  total,
+  streak,
+  rewarded,
+  feeling,
+  onReward,
+  onFeeling,
+}: {
+  score: number;
+  total: number;
+  streak: number;
+  rewarded: boolean;
+  feeling?: SessionFeeling;
+  onReward: (coins: number) => void;
+  onFeeling: (f: SessionFeeling) => void;
+}) {
+  const coins = sessionReward(total ? score / total : 0, streak);
+  const feelings: { id: SessionFeeling; label: string; icon: typeof Smile }[] = [
+    { id: "facil", label: "Fácil", icon: Smile },
+    { id: "regular", label: "Regular", icon: Meh },
+    { id: "dificil", label: "Difícil", icon: Frown },
+  ];
+  return (
+    <div className="session-result">
+      <h3>¡Sesión de repaso completada!</h3>
+      <p className="text-muted-foreground">
+        Precisión: {Math.round((score / total) * 100)}% · Racha: {streak} {streak === 1 ? "día" : "días"}
+      </p>
+      {rewarded ? (
+        <span className="pill yellow"><Coins size={14} /> +{coins} monedas recogidas</span>
+      ) : (
+        <Button onClick={() => onReward(coins)}>
+          <Coins /> Recoger {coins} monedas
+        </Button>
+      )}
+      <div className="feeling-picker">
+        <p><strong>¿Cómo sentiste la sesión?</strong></p>
+        <div className="feeling-options">
+          {feelings.map((f) => (
+            <Button
+              key={f.id}
+              variant={feeling === f.id ? "default" : "outline"}
+              size="sm"
+              onClick={() => onFeeling(f.id)}
+            >
+              <f.icon /> {f.label}
+            </Button>
+          ))}
+        </div>
+        {feeling && (
+          <small className="text-muted-foreground">
+            Ajustaremos tu próximo repaso: en {nextReviewDays(feeling)} {nextReviewDays(feeling) === 1 ? "día" : "días"}.
+          </small>
+        )}
+      </div>
+    </div>
+  );
+}
