@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Network, ListChecks, Table2, Volume2, Pause, Play, Check, X, ChevronDown, RotateCcw, Gauge } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { Notebook } from "@/lib/aulaplus";
+import type { Notebook, Wallet, SessionFeeling } from "@/lib/aulaplus";
+import { sessionReward, nextReviewDays } from "@/lib/aulaplus";
 import { mindMap, makeQuiz, dataTable, summarize, sentences } from "@/lib/tutor";
+import { Coins, Smile, Meh, Frown } from "lucide-react";
+import { toast } from "sonner";
 import mascot from "@/assets/mascot.png";
 
 type Tool = "map" | "quiz" | "table" | "audio";
@@ -54,7 +57,7 @@ function AudioPlayer({ title, lines }: { title: string; lines: string[] }) {
   );
 }
 
-export function StudyTools({ notebook, update }: { notebook: Notebook; update?: (n: Notebook) => void }) {
+export function StudyTools({ notebook, update, wallet, onWalletChange }: { notebook: Notebook; update?: (n: Notebook) => void; wallet?: Wallet; onWalletChange?: (w: Wallet) => void }) {
   const studio = notebook.studio ?? {};
   const [tool, setToolState] = useState<Tool>((studio.tool as Tool) ?? "map");
   const [picked, setPicked] = useState<Record<string, string>>(studio.quiz ?? {});
@@ -100,8 +103,28 @@ export function StudyTools({ notebook, update }: { notebook: Notebook; update?: 
         {quiz.length === 0 && <p className="text-muted-foreground">Necesito fuentes un poco más largas para crear preguntas.</p>}
         {quiz.length > 0 && <div className="flex items-center justify-between gap-2 flex-wrap">
           <span className="pill mint">Aciertos: {score} / {quiz.length}</span>
-          <Button size="sm" variant="ghost" onClick={() => { setPicked({}); save({ quiz: {} }); }}><RotateCcw />Reintentar</Button>
+          <Button size="sm" variant="ghost" onClick={() => { setPicked({}); save({ quiz: {}, rewarded: false }); }}><RotateCcw />Reintentar</Button>
         </div>}
+        {quiz.length > 0 && Object.keys(picked).length === quiz.length && wallet && onWalletChange && (
+          <SessionResult
+            score={score}
+            total={quiz.length}
+            streak={notebook.streak}
+            rewarded={studio.rewarded === true}
+            feeling={studio.feeling as SessionFeeling | undefined}
+            onReward={(coins) => {
+              onWalletChange({ ...wallet, coins: wallet.coins + coins });
+              save({ rewarded: true });
+              toast.success(`¡Ganaste ${coins} monedas de estudio! 🪙`);
+            }}
+            onFeeling={(f) => {
+              const days = nextReviewDays(f);
+              const when = new Date(Date.now() + days * 86400000).toISOString().slice(0, 10);
+              save({ feeling: f, nextReview: when });
+              toast.success(`Próximo repaso en ${days} ${days === 1 ? "día" : "días"} 📅`);
+            }}
+          />
+        )}
         {quiz.map((q, i) => <div className="quiz-item" key={i}>
           <p><strong>{i + 1}.</strong> {q.question}</p>
           <div className="quiz-options">{q.options.map((o) => {
@@ -116,6 +139,66 @@ export function StudyTools({ notebook, update }: { notebook: Notebook; update?: 
         <thead><tr><th>Concepto</th><th>Veces</th><th>Contexto</th></tr></thead>
         <tbody>{table.map((r) => <tr key={r.term}><td><strong>{r.term}</strong></td><td>{r.count}</td><td>{r.context}</td></tr>)}</tbody>
       </table></div>}
+    </div>
+  );
+}
+
+function SessionResult({
+  score,
+  total,
+  streak,
+  rewarded,
+  feeling,
+  onReward,
+  onFeeling,
+}: {
+  score: number;
+  total: number;
+  streak: number;
+  rewarded: boolean;
+  feeling?: SessionFeeling | undefined;
+  onReward: (coins: number) => void;
+  onFeeling: (f: SessionFeeling) => void;
+}) {
+  const coins = sessionReward(total ? score / total : 0, streak);
+  const feelings: { id: SessionFeeling; label: string; icon: typeof Smile }[] = [
+    { id: "facil", label: "Fácil", icon: Smile },
+    { id: "regular", label: "Regular", icon: Meh },
+    { id: "dificil", label: "Difícil", icon: Frown },
+  ];
+  return (
+    <div className="session-result">
+      <h3>¡Sesión de repaso completada!</h3>
+      <p className="text-muted-foreground">
+        Precisión: {Math.round((score / total) * 100)}% · Racha: {streak} {streak === 1 ? "día" : "días"}
+      </p>
+      {rewarded ? (
+        <span className="pill yellow"><Coins size={14} /> +{coins} monedas recogidas</span>
+      ) : (
+        <Button onClick={() => onReward(coins)}>
+          <Coins /> Recoger {coins} monedas
+        </Button>
+      )}
+      <div className="feeling-picker">
+        <p><strong>¿Cómo sentiste la sesión?</strong></p>
+        <div className="feeling-options">
+          {feelings.map((f) => (
+            <Button
+              key={f.id}
+              variant={feeling === f.id ? "default" : "outline"}
+              size="sm"
+              onClick={() => onFeeling(f.id)}
+            >
+              <f.icon /> {f.label}
+            </Button>
+          ))}
+        </div>
+        {feeling && (
+          <small className="text-muted-foreground">
+            Ajustaremos tu próximo repaso: en {nextReviewDays(feeling)} {nextReviewDays(feeling) === 1 ? "día" : "días"}.
+          </small>
+        )}
+      </div>
     </div>
   );
 }
