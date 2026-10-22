@@ -82,3 +82,51 @@ describe("inicio limpio y login", () => {
     expect(q.length).toBeGreaterThan(0);
   });
 });
+
+import { streakPets, accessories, skins, initialWallet, canBuy, buyItem, equipPet, toggleAccessory, sessionReward, nextReviewDays } from "@/lib/aulaplus";
+describe("Sistema de mascotas de racha", () => {
+  it("ofrece 8 mascotas: nube gratis y 7 formas con costo", () => {
+    expect(streakPets).toHaveLength(8);
+    expect(streakPets[0]).toMatchObject({ id: "cloud", cost: 0 });
+    expect(streakPets.slice(1).every((p) => p.cost > 0)).toBe(true);
+  });
+  it("tiene 30 accesorios en 3 categorías y 10 pieles", () => {
+    expect(accessories).toHaveLength(30);
+    for (const cat of ["lentes", "gorros", "manos"])
+      expect(accessories.filter((a) => a.category === cat)).toHaveLength(10);
+    expect(skins).toHaveLength(10);
+  });
+  it("compra solo con monedas suficientes y descuenta el costo", () => {
+    expect(canBuy(initialWallet, "heart")).toBe(false);
+    const rich = { ...initialWallet, coins: 100 };
+    const bought = buyItem(rich, "star");
+    expect(bought.coins).toBe(50);
+    expect(bought.owned).toContain("star");
+    expect(buyItem(bought, "star")).toBe(bought);
+  });
+  it("no equipa mascotas sin desbloquear", () => {
+    expect(equipPet(initialWallet, "heart")).toBe(initialWallet);
+    expect(equipPet(initialWallet, "cloud").custom.pet).toBe("cloud");
+  });
+  it("permite un accesorio por categoría y alterna equipar/quitar", () => {
+    let w = { ...initialWallet, owned: [...initialWallet.owned, "len-sol", "len-nerd", "gor-corona"] };
+    w = toggleAccessory(w, "len-sol");
+    w = toggleAccessory(w, "len-nerd");
+    expect(w.custom.accessories).toEqual(["len-nerd"]);
+    w = toggleAccessory(w, "gor-corona");
+    expect(w.custom.accessories).toEqual(["len-nerd", "gor-corona"]);
+    w = toggleAccessory(w, "len-nerd");
+    expect(w.custom.accessories).toEqual(["gor-corona"]);
+  });
+  it("recompensa por precisión y racha (máx. +5 de racha)", () => {
+    expect(sessionReward(1, 3)).toBe(13);
+    expect(sessionReward(0.5, 0)).toBe(5);
+    expect(sessionReward(1, 99)).toBe(15);
+    expect(sessionReward(0, 0)).toBe(0);
+  });
+  it("autoevaluación ajusta el próximo repaso: 4/2/1 días", () => {
+    expect(nextReviewDays("facil")).toBe(4);
+    expect(nextReviewDays("regular")).toBe(2);
+    expect(nextReviewDays("dificil")).toBe(1);
+  });
+});
