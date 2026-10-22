@@ -80,9 +80,15 @@ import {
   type Role,
   type Evaluation,
   type Student,
+  initialWallet,
+  sessionReward,
+  type Wallet,
+  type SessionFeeling,
+  nextReviewDays,
 } from "@/lib/aulaplus";
 import { toast } from "sonner";
 import { StudyChat } from "./study-chat";
+import { StreakPetAvatar, Wardrobe } from "./streak-pet";
 
 const icons = [Calculator, Leaf, MessageCircle, Landmark];
 const tones = toneOptions;
@@ -178,13 +184,15 @@ export function AulaPlus() {
   const [notifications, setNotifications] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [restored, setRestored] = useState(false);
+  const [wallet, setWallet] = useState<Wallet>(initialWallet);
   useEffect(() => {
-    let saved: { user?: UserProfile; classes?: typeof classes; activeId?: string; role?: Role } | null = null;
+    let saved: { user?: UserProfile; classes?: typeof classes; activeId?: string; role?: Role; wallet?: Wallet } | null = null;
     try { saved = JSON.parse(localStorage.getItem(STORE_KEY) ?? "null"); } catch { saved = null; }
     if (saved?.classes?.length) setClasses(saved.classes);
     if (saved?.activeId) setActiveId(saved.activeId);
     if (saved?.role) { setRole(saved.role); setNav(saved.role === "student" ? "notebooks" : "class"); }
     if (saved?.user) setUser(saved.user);
+    if (saved?.wallet) setWallet(saved.wallet);
     setRestored(true);
     const timeout = setTimeout(() => {
       setLoading(false);
@@ -194,8 +202,8 @@ export function AulaPlus() {
   }, []);
   useEffect(() => {
     if (!restored) return;
-    try { localStorage.setItem(STORE_KEY, JSON.stringify({ user, classes, activeId, role })); } catch { /* almacenamiento lleno */ }
-  }, [restored, user, classes, activeId, role]);
+    try { localStorage.setItem(STORE_KEY, JSON.stringify({ user, classes, activeId, role, wallet })); } catch { /* almacenamiento lleno */ }
+  }, [restored, user, classes, activeId, role, wallet]);
   async function save() {
     setSaving(true);
     await new Promise((r) => setTimeout(r, 300));
@@ -380,6 +388,8 @@ export function AulaPlus() {
                 userName={userName}
                 update={updateNotebook}
                 back={() => setSelected(null)}
+                wallet={wallet}
+                onWalletChange={setWallet}
               />
             ) : nav === "calendar" ? (
               <CalendarView
@@ -391,6 +401,8 @@ export function AulaPlus() {
             ) : nav === "pets" ? (
               <PetsView
                 notebooks={workspace.notebooks}
+                wallet={wallet}
+                onWalletChange={setWallet}
                 open={(id) => {
                   setNav("notebooks");
                   setSelected(id);
@@ -509,7 +521,7 @@ export function AulaPlus() {
                       <ArrowRight />
                     </Button>
                   </div>
-                  <Pet />
+                  <StreakPetAvatar custom={wallet.custom} size={150} />
                   <Star className="welcome-star" size={27} />
                 </div>
                 <div className="stats">
@@ -1130,7 +1142,7 @@ function NotebookView({
     </>
   );
 }
-function PetsView({ notebooks, open }: { notebooks: Notebook[]; open: (id: string) => void }) {
+function PetsView({ notebooks, wallet, onWalletChange, open }: { notebooks: Notebook[]; wallet: Wallet; onWalletChange: (w: Wallet) => void; open: (id: string) => void }) {
   return (
     <>
       <div className="page-heading">
@@ -1140,6 +1152,13 @@ function PetsView({ notebooks, open }: { notebooks: Notebook[]; open: (id: strin
         </div>
         <PawPrint className="text-primary" size={30} />
       </div>
+      <section className="wardrobe-card">
+        <div className="section-heading">
+          <h2>Armario de mascota</h2>
+          <p className="subtitle">Gana monedas repasando y desbloquea mascotas, accesorios y pieles.</p>
+        </div>
+        <Wardrobe wallet={wallet} onChange={onWalletChange} />
+      </section>
       <div className="notebook-grid">
         {notebooks.map((n) => (
           <article className={`student-tile tone-${n.tone}`} key={n.id}>
