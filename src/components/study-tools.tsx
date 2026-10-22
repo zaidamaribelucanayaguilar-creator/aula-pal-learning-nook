@@ -103,8 +103,28 @@ export function StudyTools({ notebook, update, wallet, onWalletChange }: { noteb
         {quiz.length === 0 && <p className="text-muted-foreground">Necesito fuentes un poco más largas para crear preguntas.</p>}
         {quiz.length > 0 && <div className="flex items-center justify-between gap-2 flex-wrap">
           <span className="pill mint">Aciertos: {score} / {quiz.length}</span>
-          <Button size="sm" variant="ghost" onClick={() => { setPicked({}); save({ quiz: {} }); }}><RotateCcw />Reintentar</Button>
+          <Button size="sm" variant="ghost" onClick={() => { setPicked({}); save({ quiz: {}, rewarded: false, feeling: undefined }); }}><RotateCcw />Reintentar</Button>
         </div>}
+        {quiz.length > 0 && Object.keys(picked).length === quiz.length && wallet && onWalletChange && (
+          <SessionResult
+            score={score}
+            total={quiz.length}
+            streak={notebook.streak}
+            rewarded={studio.rewarded === true}
+            feeling={studio.feeling as SessionFeeling | undefined}
+            onReward={(coins) => {
+              onWalletChange({ ...wallet, coins: wallet.coins + coins });
+              save({ rewarded: true });
+              toast.success(`¡Ganaste ${coins} monedas de estudio! 🪙`);
+            }}
+            onFeeling={(f) => {
+              const days = nextReviewDays(f);
+              const when = new Date(Date.now() + days * 86400000).toISOString().slice(0, 10);
+              save({ feeling: f, nextReview: when });
+              toast.success(`Próximo repaso en ${days} ${days === 1 ? "día" : "días"} 📅`);
+            }}
+          />
+        )}
         {quiz.map((q, i) => <div className="quiz-item" key={i}>
           <p><strong>{i + 1}.</strong> {q.question}</p>
           <div className="quiz-options">{q.options.map((o) => {
