@@ -1531,3 +1531,70 @@ select {
 .audio-transcript li.on { color: var(--primary); font-weight: 800; }
 .chat-panel { height: max(640px, calc(100vh - 220px)); }
 .chat-panel, .notes-editor { font-size: 17px; }
+
+/* ===== Sistema de Mascotas de Racha ===== */
+.streak-pet { position: relative; display: inline-block; }
+.streak-pet .streak-base { display: block; width: 100%; height: 100%; object-fit: contain; }
+.streak-pet.floating { animation: pet-float 3.2s ease-in-out infinite; }
+.streak-pet.floating .streak-base { animation: pet-blink 4.5s ease-in-out infinite; transform-origin: center; }
+@keyframes pet-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes pet-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.94); } }
+.streak-fill { fill: #ffd166; stroke: #2b2b3d; stroke-width: 2.5; stroke-linejoin: round; }
+.skin-normal .streak-fill { fill: #ffd166; }
+.skin-tierra .streak-fill { fill: #4ea8de; }
+.skin-futbol .streak-fill { fill: #f8f9fa; }
+.skin-galaxia .streak-fill { fill: #5a189a; }
+.skin-dorado .streak-fill { fill: #ffb703; }
+.skin-arcoiris .streak-fill { fill: #ff70a6; }
+.skin-sandia .streak-fill { fill: #ef476f; }
+.skin-oceano .streak-fill { fill: #06d6a0; }
+.skin-lava .streak-fill { fill: #e36414; }
+.skin-aurora .streak-fill { fill: #80ffdb; }
+.streak-pet[class*="skin-"]:not(.skin-normal) .streak-base:is(img) { filter: drop-shadow(0 6px 14px rgba(0,0,0,.18)); }
+.skin-tierra .streak-base:is(img) { filter: hue-rotate(150deg) saturate(1.2); }
+.skin-futbol .streak-base:is(img) { filter: grayscale(1) contrast(1.15); }
+.skin-galaxia .streak-base:is(img) { filter: hue-rotate(250deg) saturate(1.6) brightness(.85); }
+.skin-dorado .streak-base:is(img) { filter: sepia(.9) saturate(2.2) hue-rotate(-10deg); }
+.skin-arcoiris .streak-base:is(img) { filter: hue-rotate(320deg) saturate(1.8); }
+.skin-sandia .streak-base:is(img) { filter: hue-rotate(330deg) saturate(1.4); }
+.skin-oceano .streak-base:is(img) { filter: hue-rotate(120deg) saturate(1.3); }
+.skin-lava .streak-base:is(img) { filter: hue-rotate(15deg) saturate(2) brightness(.9); }
+.skin-aurora .streak-base:is(img) { filter: hue-rotate(90deg) saturate(1.5) brightness(1.05); }
+.acc { position: absolute; line-height: 1; pointer-events: none; filter: drop-shadow(0 2px 3px rgba(0,0,0,.25)); }
+.acc-gorro { top: -8%; left: 50%; transform: translateX(-50%); }
+.acc-lentes { top: 34%; left: 50%; transform: translateX(-50%); }
+.acc-manos { bottom: 12%; right: -4%; }
+
+.wardrobe-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 28px; }
+.wardrobe { display: grid; gap: 20px; }
+.wardrobe-preview { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px; background: var(--muted); border-radius: 16px; }
+.wardrobe-preview h3 { margin: 0; }
+.wardrobe-section h4 { margin: 0 0 10px; }
+.wardrobe-pets { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
+.wardrobe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; margin-top: 12px; }
+.wardrobe-item { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 8px; border: 2px solid var(--border); border-radius: 14px; background: var(--background); cursor: pointer; transition: transform .15s, border-color .15s; font: inherit; color: inherit; }
+.wardrobe-item:hover:not(:disabled) { transform: translateY(-2px); border-color: var(--primary); }
+.wardrobe-item:disabled { opacity: .5; cursor: not-allowed; }
+.wardrobe-item.equipped { border-color: var(--primary); background: color-mix(in oklab, var(--primary) 8%, var(--background)); }
+.wardrobe-item small { font-weight: 700; text-align: center; }
+.wardrobe-emoji { font-size: 30px; line-height: 1; }
+.wardrobe-tag { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 999px; background: var(--muted); }
+.wardrobe-tag.on { background: var(--primary); color: var(--primary-foreground); }
+.wardrobe-tag.lock { background: #fff3cd; color: #8a6d00; }
+.skin-dot { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--border); background: #ffd166; }
+.skin-dot.skin-normal { background: #ffd166; }
+.skin-dot.skin-tierra { background: linear-gradient(135deg, #4ea8de, #80b918); }
+.skin-dot.skin-futbol { background: radial-gradient(circle at 35% 35%, #fff 55%, #212529 56%); }
+.skin-dot.skin-galaxia { background: linear-gradient(135deg, #5a189a, #10002b); }
+.skin-dot.skin-dorado { background: linear-gradient(135deg, #ffb703, #fb8500); }
+.skin-dot.skin-arcoiris { background: linear-gradient(135deg, #ff70a6, #ffd670, #70d6ff); }
+.skin-dot.skin-sandia { background: linear-gradient(135deg, #ef476f 60%, #06d6a0 61%); }
+.skin-dot.skin-oceano { background: linear-gradient(135deg, #06d6a0, #118ab2); }
+.skin-dot.skin-lava { background: linear-gradient(135deg, #e36414, #6a040f); }
+.skin-dot.skin-aurora { background: linear-gradient(135deg, #80ffdb, #5390d9); }
+
+.session-result { margin-top: 16px; padding: 18px; border: 2px dashed var(--primary); border-radius: 16px; display: grid; gap: 10px; justify-items: start; background: color-mix(in oklab, var(--primary) 5%, var(--background)); }
+.session-result h3 { margin: 0; }
+.feeling-picker { display: grid; gap: 8px; }
+.feeling-picker p { margin: 0; }
+.feeling-options { display: flex; gap: 8px; flex-wrap: wrap; }
