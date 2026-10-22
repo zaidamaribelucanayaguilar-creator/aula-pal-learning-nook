@@ -103,7 +103,7 @@ export function StudyTools({ notebook, update, wallet, onWalletChange }: { noteb
         {quiz.length === 0 && <p className="text-muted-foreground">Necesito fuentes un poco más largas para crear preguntas.</p>}
         {quiz.length > 0 && <div className="flex items-center justify-between gap-2 flex-wrap">
           <span className="pill mint">Aciertos: {score} / {quiz.length}</span>
-          <Button size="sm" variant="ghost" onClick={() => { setPicked({}); save({ quiz: {}, rewarded: false, feeling: undefined }); }}><RotateCcw />Reintentar</Button>
+          <Button size="sm" variant="ghost" onClick={() => { setPicked({}); save({ quiz: {}, rewarded: false }); }}><RotateCcw />Reintentar</Button>
         </div>}
         {quiz.length > 0 && Object.keys(picked).length === quiz.length && wallet && onWalletChange && (
           <SessionResult
@@ -156,7 +156,7 @@ function SessionResult({
   total: number;
   streak: number;
   rewarded: boolean;
-  feeling?: SessionFeeling;
+  feeling?: SessionFeeling | undefined;
   onReward: (coins: number) => void;
   onFeeling: (f: SessionFeeling) => void;
 }) {
