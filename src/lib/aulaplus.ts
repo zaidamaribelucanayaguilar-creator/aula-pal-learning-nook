@@ -185,3 +185,119 @@ export type UserProfile = { name: string; email: string; lang: string };
 export function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
 }
+
+// ===== Sistema de Mascotas de Racha y Gamificación =====
+export type StreakPetId = "cloud" | "circle" | "square" | "triangle" | "star" | "hexagon" | "diamond" | "heart";
+export type StreakPet = { id: StreakPetId; name: string; shape: string; cost: number };
+export const streakPets: StreakPet[] = [
+  { id: "cloud", name: "Nubia", shape: "cloud", cost: 0 },
+  { id: "circle", name: "Bola", shape: "circle", cost: 20 },
+  { id: "square", name: "Cubito", shape: "square", cost: 30 },
+  { id: "triangle", name: "Trino", shape: "triangle", cost: 40 },
+  { id: "star", name: "Estrella", shape: "star", cost: 50 },
+  { id: "hexagon", name: "Hexa", shape: "hexagon", cost: 60 },
+  { id: "diamond", name: "Rombi", shape: "diamond", cost: 70 },
+  { id: "heart", name: "Cora", shape: "heart", cost: 80 },
+];
+
+export type AccessoryCategory = "lentes" | "gorros" | "manos";
+export type Accessory = { id: string; name: string; emoji: string; category: AccessoryCategory; cost: number };
+export const accessories: Accessory[] = [
+  { id: "len-sol", name: "Lentes de sol", emoji: "🕶️", category: "lentes", cost: 10 },
+  { id: "len-redondos", name: "Lentes redondos", emoji: "👓", category: "lentes", cost: 10 },
+  { id: "len-corazon", name: "Lentes corazón", emoji: "😍", category: "lentes", cost: 15 },
+  { id: "len-estrella", name: "Lentes estrella", emoji: "🤩", category: "lentes", cost: 15 },
+  { id: "len-gafas3d", name: "Gafas 3D", emoji: "🎬", category: "lentes", cost: 12 },
+  { id: "len-monoculo", name: "Monóculo", emoji: "🧐", category: "lentes", cost: 18 },
+  { id: "len-buceo", name: "Gafas de buceo", emoji: "🤿", category: "lentes", cost: 14 },
+  { id: "len-nerd", name: "Lentes de genio", emoji: "🤓", category: "lentes", cost: 12 },
+  { id: "len-fiesta", name: "Lentes de fiesta", emoji: "🥳", category: "lentes", cost: 16 },
+  { id: "len-galaxia", name: "Lentes galaxia", emoji: "🌌", category: "lentes", cost: 20 },
+  { id: "gor-fiesta", name: "Gorro de fiesta", emoji: "🎉", category: "gorros", cost: 10 },
+  { id: "gor-gorra", name: "Gorra deportiva", emoji: "🧢", category: "gorros", cost: 10 },
+  { id: "gor-corona", name: "Corona real", emoji: "👑", category: "gorros", cost: 25 },
+  { id: "gor-mago", name: "Sombrero de mago", emoji: "🎩", category: "gorros", cost: 18 },
+  { id: "gor-graduacion", name: "Birrete", emoji: "🎓", category: "gorros", cost: 20 },
+  { id: "gor-astronauta", name: "Casco espacial", emoji: "🚀", category: "gorros", cost: 22 },
+  { id: "gor-flor", name: "Corona de flores", emoji: "🌸", category: "gorros", cost: 14 },
+  { id: "gor-pirata", name: "Sombrero pirata", emoji: "🏴‍☠️", category: "gorros", cost: 16 },
+  { id: "gor-navidad", name: "Gorro navideño", emoji: "🎅", category: "gorros", cost: 12 },
+  { id: "gor-audifonos", name: "Audífonos", emoji: "🎧", category: "gorros", cost: 15 },
+  { id: "man-guantes", name: "Guantes mágicos", emoji: "🧤", category: "manos", cost: 10 },
+  { id: "man-varita", name: "Varita mágica", emoji: "🪄", category: "manos", cost: 20 },
+  { id: "man-libro", name: "Libro favorito", emoji: "📖", category: "manos", cost: 12 },
+  { id: "man-lapiz", name: "Lápiz gigante", emoji: "✏️", category: "manos", cost: 8 },
+  { id: "man-balón", name: "Balón", emoji: "⚽", category: "manos", cost: 12 },
+  { id: "man-guitarra", name: "Guitarra", emoji: "🎸", category: "manos", cost: 18 },
+  { id: "man-mando", name: "Mando de juegos", emoji: "🎮", category: "manos", cost: 15 },
+  { id: "man-paleta", name: "Paleta de pintor", emoji: "🎨", category: "manos", cost: 14 },
+  { id: "man-globo", name: "Globo", emoji: "🎈", category: "manos", cost: 8 },
+  { id: "man-trofeo", name: "Trofeo", emoji: "🏆", category: "manos", cost: 25 },
+];
+
+export type Skin = { id: string; name: string; cost: number };
+export const skins: Skin[] = [
+  { id: "normal", name: "Clásica", cost: 0 },
+  { id: "tierra", name: "Planeta Tierra", cost: 25 },
+  { id: "futbol", name: "Pelota de fútbol", cost: 25 },
+  { id: "galaxia", name: "Galaxia", cost: 40 },
+  { id: "dorado", name: "Dorado", cost: 50 },
+  { id: "arcoiris", name: "Arcoíris", cost: 35 },
+  { id: "sandia", name: "Sandía", cost: 30 },
+  { id: "oceano", name: "Océano", cost: 30 },
+  { id: "lava", name: "Lava", cost: 45 },
+  { id: "aurora", name: "Aurora", cost: 45 },
+];
+
+export type PetCustomization = { pet: StreakPetId; skin: string; accessories: string[] };
+export type Wallet = { coins: number; owned: string[]; custom: PetCustomization };
+export const initialWallet: Wallet = {
+  coins: 15,
+  owned: ["cloud", "normal"],
+  custom: { pet: "cloud", skin: "normal", accessories: [] },
+};
+
+export function itemCost(id: string): number {
+  return (
+    streakPets.find((p) => p.id === id)?.cost ??
+    accessories.find((a) => a.id === id)?.cost ??
+    skins.find((s) => s.id === id)?.cost ??
+    0
+  );
+}
+export function canBuy(wallet: Wallet, id: string) {
+  return !wallet.owned.includes(id) && wallet.coins >= itemCost(id);
+}
+export function buyItem(wallet: Wallet, id: string): Wallet {
+  if (!canBuy(wallet, id)) return wallet;
+  return { ...wallet, coins: wallet.coins - itemCost(id), owned: [...wallet.owned, id] };
+}
+export function equipPet(wallet: Wallet, pet: StreakPetId): Wallet {
+  if (!wallet.owned.includes(pet)) return wallet;
+  return { ...wallet, custom: { ...wallet.custom, pet } };
+}
+export function equipSkin(wallet: Wallet, skin: string): Wallet {
+  if (!wallet.owned.includes(skin)) return wallet;
+  return { ...wallet, custom: { ...wallet.custom, skin } };
+}
+/** Equipa o desequipa un accesorio; máximo uno por categoría. */
+export function toggleAccessory(wallet: Wallet, id: string): Wallet {
+  if (!wallet.owned.includes(id)) return wallet;
+  const acc = accessories.find((a) => a.id === id);
+  if (!acc) return wallet;
+  const current = wallet.custom.accessories;
+  const without = current.filter((x) => accessories.find((a) => a.id === x)?.category !== acc.category);
+  const next = current.includes(id) ? without : [...without, id];
+  return { ...wallet, custom: { ...wallet.custom, accessories: next } };
+}
+
+/** Monedas por sesión de repaso: precisión (0-1) y racha de días. */
+export function sessionReward(accuracy: number, streak: number) {
+  const a = Math.min(1, Math.max(0, accuracy));
+  return Math.round(a * 10) + Math.min(Math.max(0, streak), 5);
+}
+export type SessionFeeling = "facil" | "regular" | "dificil";
+/** Días hasta el próximo repaso según la autoevaluación. */
+export function nextReviewDays(feeling: SessionFeeling) {
+  return feeling === "facil" ? 4 : feeling === "regular" ? 2 : 1;
+}
