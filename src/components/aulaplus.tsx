@@ -890,11 +890,15 @@ function NotebookView({
   update,
   back,
   userName = "",
+  wallet,
+  onWalletChange,
 }: {
   notebook: Notebook;
   update: (n: Notebook) => void;
   back: () => void;
   userName?: string;
+  wallet: Wallet;
+  onWalletChange: (w: Wallet) => void;
 }) {
   const [tab, setTab] = useState("chat");
   const card = n.studio?.card ?? 0;
@@ -966,7 +970,7 @@ function NotebookView({
           {tab === "chat" ? (
             <StudyChat key={n.id} notebook={n} userName={userName} addNotes={(txt) => update({ ...n, notes: n.notes ? `${n.notes}\n\n${txt}` : txt })} />
           ) : tab === "studyplus" ? (
-            <StudyTools notebook={n} update={update} />
+            <StudyTools notebook={n} update={update} wallet={wallet} onWalletChange={onWalletChange} />
           ) : tab === "sources" ? (
             <SourcesPanel notebook={n} update={update} />
           ) : tab === "flashcards" ? (
