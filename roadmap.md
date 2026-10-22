@@ -16,5 +16,5 @@
 - [x] PWA offline-first: service worker, manifest instalable, caché de interfaz + datos locales
 - [x] Fecha real del navegador en calendario y panel principal
 - [x] Logotipo oficial subido por la usuaria (libro y lápiz turquesa) en PWA, manifest y favicon
-- [ ] Sistema de Mascotas de Racha: nube animada en dashboard, catálogo de 8 mascotas, armario (30 accesorios + 10 pieles), monedas de estudio, calificación automática + autoevaluación Fácil/Regular/Difícil
+- [x] Sistema de Mascotas de Racha: nube animada en dashboard, catálogo de 8 mascotas, armario (30 accesorios + 10 pieles), monedas de estudio, calificación automática + autoevaluación Fácil/Regular/Difícil
 - [ ] Publicar todo en aulaplus.lovable.app (slug aula-pal-buddy ocupado; usuaria eligió aulaplus)
