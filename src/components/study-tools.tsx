@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Network, ListChecks, Table2, Volume2, Pause, Play, Check, X, ChevronDown, RotateCcw, Gauge } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { Notebook } from "@/lib/aulaplus";
+import type { Notebook, Wallet, SessionFeeling } from "@/lib/aulaplus";
+import { sessionReward, nextReviewDays } from "@/lib/aulaplus";
 import { mindMap, makeQuiz, dataTable, summarize, sentences } from "@/lib/tutor";
+import { Coins, Smile, Meh, Frown } from "lucide-react";
+import { toast } from "sonner";
 import mascot from "@/assets/mascot.png";
 
 type Tool = "map" | "quiz" | "table" | "audio";
@@ -54,7 +57,7 @@ function AudioPlayer({ title, lines }: { title: string; lines: string[] }) {
   );
 }
 
-export function StudyTools({ notebook, update }: { notebook: Notebook; update?: (n: Notebook) => void }) {
+export function StudyTools({ notebook, update, wallet, onWalletChange }: { notebook: Notebook; update?: (n: Notebook) => void; wallet?: Wallet; onWalletChange?: (w: Wallet) => void }) {
   const studio = notebook.studio ?? {};
   const [tool, setToolState] = useState<Tool>((studio.tool as Tool) ?? "map");
   const [picked, setPicked] = useState<Record<string, string>>(studio.quiz ?? {});
