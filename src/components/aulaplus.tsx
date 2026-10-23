@@ -89,7 +89,7 @@ import { StudyChat } from "./study-chat";
 import { StreakPetAvatar, Wardrobe } from "./streak-pet";
 
 /** Mascota del cuaderno (o Nubi por defecto). */
-function CompanionAvatar({ companion, size = 72, animated = false }: { companion?: string; size?: number; animated?: boolean }) {
+function CompanionAvatar({ companion, size = 72, animated = false }: { companion?: string | undefined; size?: number; animated?: boolean }) {
   const pet = streakPets.some((p) => p.id === companion) ? (companion as StreakPetId) : "cloud";
   return <StreakPetAvatar custom={{ pet, skin: "normal", accessories: [] }} size={size} animated={animated} />;
 }
