@@ -81,10 +81,18 @@ import {
   type Wallet,
   type SessionFeeling,
   nextReviewDays,
+  streakPets,
+  type StreakPetId,
 } from "@/lib/aulaplus";
 import { toast } from "sonner";
 import { StudyChat } from "./study-chat";
 import { StreakPetAvatar, Wardrobe } from "./streak-pet";
+
+/** Mascota del cuaderno (o Nubi por defecto). */
+function CompanionAvatar({ companion, size = 72, animated = false }: { companion?: string; size?: number; animated?: boolean }) {
+  const pet = streakPets.some((p) => p.id === companion) ? (companion as StreakPetId) : "cloud";
+  return <StreakPetAvatar custom={{ pet, skin: "normal", accessories: [] }} size={size} animated={animated} />;
+}
 
 const icons = [Calculator, Leaf, MessageCircle, Landmark];
 const tones = toneOptions;
@@ -167,6 +175,7 @@ export function AulaPlus() {
   }, []);
   const [newName, setNewName] = useState("");
   const [tone, setTone] = useState("mint");
+  const [companion, setCompanion] = useState<StreakPetId>("cloud");
   const [help, setHelp] = useState(false);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loginOpen, setLoginOpen] = useState(false);
@@ -242,6 +251,7 @@ export function AulaPlus() {
       name: newName.trim(),
       subject: "Una nueva aventura por comenzar",
       tone,
+      companion,
       points: 0,
       streak: 0,
       notes: "",
@@ -594,7 +604,7 @@ export function AulaPlus() {
                       <div className="mini-pets">
                         {workspace.notebooks.slice(0, 3).map((n) => (
                           <div className="mini-pet" key={n.id}>
-                            <NubiAvatar size={56} />
+                            <CompanionAvatar companion={n.companion} size={56} />
                             <p>{n.name}</p>
                             <span className="text-[9px] text-muted-foreground">
                               Nivel {petLevel(n.points)}
@@ -669,9 +679,37 @@ export function AulaPlus() {
               maxLength={70}
             />
           </label>
-          <p className="text-muted-foreground text-sm" style={{ margin: 0 }}>
-            Nubi y sus amigos Círculo, Cuadrado y Triángulo te acompañan desde el nivel 1. Estrella, Hexágono, Rombo y Corazón se desbloquean con tus puntos de aprendizaje (50, 60, 70 y 80). ¡Se ganan estudiando, sin dinero real!
-          </p>
+          <label>Tu compañero de aventura</label>
+          <div className="wardrobe-pets">
+            {streakPets.map((p) => {
+              const totalPoints = workspace.notebooks.reduce((a, nb) => a + nb.points, 0);
+              const locked = p.cost > 0 && totalPoints < p.cost;
+              const selected = companion === p.id;
+              return (
+                <button
+                  type="button"
+                  key={p.id}
+                  className={`wardrobe-item ${selected ? "equipped" : ""}`}
+                  disabled={locked}
+                  aria-label={p.name}
+                  aria-pressed={selected}
+                  onClick={() => setCompanion(p.id)}
+                >
+                  <StreakPetAvatar custom={{ pet: p.id, skin: "normal", accessories: [] }} size={52} animated={false} />
+                  <small>{p.name}</small>
+                  {selected ? (
+                    <span className="wardrobe-tag on"><Check size={11} /> Elegida</span>
+                  ) : p.cost === 0 ? (
+                    <span className="wardrobe-tag">Gratis</span>
+                  ) : locked ? (
+                    <span className="wardrobe-tag lock">{p.cost} pts</span>
+                  ) : (
+                    <span className="wardrobe-tag on">¡Desbloqueada!</span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
           <label>Elige un color</label>
           <div className="color-options">
             {tones.map((t) => (
@@ -828,7 +866,7 @@ function NotebookCard({
           <Star size={10} />
           Nivel {petLevel(n.points)}
         </span>
-        <NubiAvatar size={72} />
+        <CompanionAvatar companion={n.companion} size={72} />
       </div>
       <div className="notebook-body">
         <h3>{n.name}</h3>
@@ -1094,7 +1132,7 @@ function NotebookView({
         </section>
         <aside>
           <div className={`study-pet tone-${n.tone}`}>
-            <NubiAvatar size={110} animated />
+            <CompanionAvatar companion={n.companion} size={110} animated />
             <div>
               <span className={`pill ${n.tone}`}>
                 {petLevel(n.points) >= 4
