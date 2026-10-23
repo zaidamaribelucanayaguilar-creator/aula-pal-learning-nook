@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import type { Notebook } from "@/lib/aulaplus";
 import { tutorReply, followUps, webSearchMany, formatWebAnswer, WEB_OFFER } from "@/lib/tutor";
 import { readStudyFile } from "@/lib/file-reader";
-import mascot from "@/assets/mascot.png";
+import mascot from "@/assets/pet-cloud.png";
 
 type ChatMsg = { id: string; role: "user" | "assistant"; text: string; chips?: string[]; webQuery?: string };
 

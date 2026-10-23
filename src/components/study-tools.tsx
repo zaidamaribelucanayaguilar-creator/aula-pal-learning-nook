@@ -6,7 +6,7 @@ import { sessionReward, nextReviewDays } from "@/lib/aulaplus";
 import { mindMap, makeQuiz, dataTable, summarize, sentences } from "@/lib/tutor";
 import { Coins, Smile, Meh, Frown } from "lucide-react";
 import { toast } from "sonner";
-import mascot from "@/assets/mascot.png";
+import mascot from "@/assets/pet-cloud.png";
 
 type Tool = "map" | "quiz" | "table" | "audio";
 

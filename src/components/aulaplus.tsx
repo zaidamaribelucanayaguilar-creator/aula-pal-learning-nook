@@ -53,8 +53,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Pet, speciesLabels } from "./pet";
-export { Pet } from "./pet";
+import { NubiAvatar } from "./streak-pet";
 import { ThemeSettings } from "./theme-settings";
 import { ClassroomControls } from "./classroom-controls";
 import { LoginScreen } from "./login-screen";
@@ -69,9 +68,6 @@ import {
   type UserProfile,
   createClassroom,
   updateClassWorkspace,
-  petSpecies,
-  petNames,
-  type PetSpecies,
   evaluate,
   petLevel,
   makeGroups,
@@ -171,7 +167,6 @@ export function AulaPlus() {
   }, []);
   const [newName, setNewName] = useState("");
   const [tone, setTone] = useState("mint");
-  const [species, setSpecies] = useState<PetSpecies>("monster");
   const [help, setHelp] = useState(false);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loginOpen, setLoginOpen] = useState(false);
@@ -247,8 +242,6 @@ export function AulaPlus() {
       name: newName.trim(),
       subject: "Una nueva aventura por comenzar",
       tone,
-      pet: petNames[species],
-      species,
       points: 0,
       streak: 0,
       notes: "",
@@ -297,7 +290,7 @@ export function AulaPlus() {
             {tr(lang, "help")}
           </Button>
           <div className="side-mascot">
-            <Pet />
+            <NubiAvatar size={96} animated />
             <h3 className="text-sm">¡Pequeños pasos, grandes logros!</h3>
             <p>Tu esfuerzo te hace crecer.</p>
           </div>
@@ -436,7 +429,7 @@ export function AulaPlus() {
                       <ArrowRight />
                     </Button>
                   </div>
-                  <Pet />
+                  <NubiAvatar size={130} animated />
                   <Star className="welcome-star" size={27} />
                 </div>
                 <div className="stats">
@@ -460,7 +453,7 @@ export function AulaPlus() {
                         className="student-select"
                         onClick={() => setFeedback(s)}
                       >
-                        <Pet species={petSpecies[workspace.students.indexOf(s) % petSpecies.length] ?? "monster"} />
+                        <NubiAvatar size={64} />
                         <h3>{s.name}</h3>
                         <span className="pill mint">
                           <Star size={12} />
@@ -601,8 +594,8 @@ export function AulaPlus() {
                       <div className="mini-pets">
                         {workspace.notebooks.slice(0, 3).map((n) => (
                           <div className="mini-pet" key={n.id}>
-                            <Pet species={n.species} tone={n.tone} />
-                            <p>{n.pet}</p>
+                            <NubiAvatar size={56} />
+                            <p>{n.name}</p>
                             <span className="text-[9px] text-muted-foreground">
                               Nivel {petLevel(n.points)}
                             </span>
@@ -646,7 +639,7 @@ export function AulaPlus() {
         description="Un lugar para aprender y crecer juntos."
       >
         <div className="role-content">
-          <Pet />
+          <NubiAvatar size={110} animated />
           <h1>¿Eres Profesor o Estudiante?</h1>
           <p className="onboarding-desc">Elige tu espacio y comienza la aventura.</p>
           <div className="role-options">
@@ -676,12 +669,9 @@ export function AulaPlus() {
               maxLength={70}
             />
           </label>
-          <label>Tu compañero de aventura</label>
-          <div className="pet-options">
-            {petSpecies.map((kind) => <Button type="button" variant="outline" key={kind} className={`pet-option ${species === kind ? "selected" : ""}`} onClick={() => setSpecies(kind)} aria-label={speciesLabels[kind]} aria-pressed={species === kind}>
-              <Pet species={kind} /><span>{speciesLabels[kind]}</span>{species === kind && <Check size={14} />}
-            </Button>)}
-          </div>
+          <p className="text-muted-foreground text-sm" style={{ margin: 0 }}>
+            Nubi y sus amigos Círculo, Cuadrado y Triángulo te acompañan desde el nivel 1. Estrella, Hexágono, Rombo y Corazón se desbloquean con tus puntos de aprendizaje (50, 60, 70 y 80). ¡Se ganan estudiando, sin dinero real!
+          </p>
           <label>Elige un color</label>
           <div className="color-options">
             {tones.map((t) => (
@@ -838,12 +828,12 @@ function NotebookCard({
           <Star size={10} />
           Nivel {petLevel(n.points)}
         </span>
-        <Pet species={n.species} tone={n.tone} />
+        <NubiAvatar size={72} />
       </div>
       <div className="notebook-body">
         <h3>{n.name}</h3>
         <p>{n.subject}</p>
-        <Progress points={n.points} name={n.pet} />
+        <Progress points={n.points} name={n.name} />
         <div className="notebook-footer">
           <span>
             <Flame size={13} />
@@ -1104,7 +1094,7 @@ function NotebookView({
         </section>
         <aside>
           <div className={`study-pet tone-${n.tone}`}>
-            <Pet species={n.species} tone={n.tone} className={petLevel(n.points) >= 4 ? "evolved" : ""} />
+            <NubiAvatar size={110} animated />
             <div>
               <span className={`pill ${n.tone}`}>
                 {petLevel(n.points) >= 4
@@ -1113,9 +1103,9 @@ function NotebookView({
                     ? "Pequeño explorador"
                     : "Nuevo compañero"}
               </span>
-              <h2 className="mt-3">{n.pet}</h2>
+              <h2 className="mt-3">{n.name}</h2>
               <p className="text-xs mt-2">Tu compañero de {n.name}</p>
-              <Progress points={n.points} name={n.pet} />
+              <Progress points={n.points} name={n.name} />
               <span className={`pill ${n.tone}`}>
                 <Star size={12} />
                 {n.points} puntos
@@ -1132,7 +1122,7 @@ function NotebookView({
                 variant={i === 0 ? "default" : "outline"}
                 onClick={() => {
                   update({ ...n, points: evaluate(n.points, g) });
-                  toast.success(`${g}: +${i === 0 ? 2 : i === 1 ? 1 : 0} puntos para ${n.pet}`);
+                  toast.success(`${g}: +${i === 0 ? 2 : i === 1 ? 1 : 0} puntos para ${n.name}`);
                 }}
               >
                 {i === 0 ? <Star /> : i === 1 ? <CheckCircle2 /> : <RotateCcw />}
@@ -1161,15 +1151,15 @@ function PetsView({ notebooks, wallet, onWalletChange, open }: { notebooks: Note
           <h2>Armario de mascota</h2>
           <p className="subtitle">Gana monedas repasando y desbloquea mascotas, accesorios y pieles.</p>
         </div>
-        <Wardrobe wallet={wallet} onChange={onWalletChange} />
+        <Wardrobe wallet={wallet} onChange={onWalletChange} totalPoints={notebooks.reduce((a, n) => a + n.points, 0)} />
       </section>
       <div className="notebook-grid">
         {notebooks.map((n) => (
           <article className={`student-tile tone-${n.tone}`} key={n.id}>
-            <Pet species={n.species} tone={n.tone} className={petLevel(n.points) >= 4 ? "evolved" : ""} />
-            <h2>{n.pet}</h2>
-            <p className="text-muted-foreground text-xs mt-2">{n.name}</p>
-            <Progress points={n.points} name={n.pet} />
+            <NubiAvatar size={90} />
+            <h2>{n.name}</h2>
+            <p className="text-muted-foreground text-xs mt-2">Nivel {petLevel(n.points)}</p>
+            <Progress points={n.points} name={n.name} />
             <Button variant="outline" onClick={() => open(n.id)}>
               Seguir aprendiendo
               <ArrowRight />
@@ -1463,7 +1453,7 @@ function GroupsView({ students }: { students: Student[] }) {
         </div>
       ) : (
         <div className="empty mt-10">
-          <Pet className="w-40 h-40 mx-auto" />
+          <NubiAvatar size={140} />
           <h3>Hay grandes ideas esperando un equipo.</h3>
         </div>
       )}
@@ -1664,7 +1654,7 @@ function ToolsView({ students }: { students: Student[] }) {
             ¿Quién participa ahora?
           </h2>
           <div className="random-student">
-            <Pet tone={random?.tone || "mint"} />
+            <NubiAvatar size={90} />
             <h2>{random?.name || "¡Todos tienen una oportunidad!"}</h2>
           </div>
           <div className="tool-controls">
@@ -1684,7 +1674,7 @@ function ToolsView({ students }: { students: Student[] }) {
             <Target className="text-primary" />
             Nuestra pequeña meta
           </h2>
-          <Pet className="w-36 h-36 mx-auto mt-5" />
+          <div className="flex justify-center mt-5"><NubiAvatar size={130} /></div>
           <p className="text-center text-muted-foreground leading-7">
             Hoy escuchamos con atención,
             <br />
