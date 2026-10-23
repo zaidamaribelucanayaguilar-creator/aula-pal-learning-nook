@@ -10,7 +10,7 @@ const faqs = [
   { q: "¿Cómo creo una clase?", a: "En Modo Profesor usa “Crear Nueva Clase” arriba y luego “Gestionar estudiantes” para añadir alumnos.", who: "Profesores" },
   { q: "¿Cómo armo grupos?", a: "Ve a Grupos de trabajo, elige el tamaño (2 a 6+) y pulsa mezclar.", who: "Profesores" },
   { q: "¿Cómo doy puntos?", a: "En Mi clase toca a un estudiante y elige una habilidad para sumar o restar puntos.", who: "Profesores" },
-  { q: "¿Se guardan mis avances?", a: "Es un prototipo: los cambios viven mientras la pestaña esté abierta. Al recargar empieza de nuevo.", who: "Todos" },
+  { q: "¿Se guardan mis avances?", a: "¡Sí! Todos tus cuadernos, apuntes y progreso de mascotas se guardan automáticamente en tu dispositivo para que no pierdas nada.", who: "Todos" },
   { q: "¿Cómo cambio mi nombre o idioma?", a: "Toca la flecha junto a tu avatar y elige Editar Perfil o Configuración.", who: "Todos" },
   { q: "¿Cómo cambio el fondo?", a: "Usa el botón de tema en la barra superior: claro, oscuro, azul escolar o una imagen propia.", who: "Todos" },
 ];
