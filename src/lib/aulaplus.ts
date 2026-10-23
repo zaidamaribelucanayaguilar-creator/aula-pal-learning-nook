@@ -190,14 +190,14 @@ export function isValidEmail(email: string) {
 export type StreakPetId = "cloud" | "circle" | "square" | "triangle" | "star" | "hexagon" | "diamond" | "heart";
 export type StreakPet = { id: StreakPetId; name: string; shape: string; cost: number };
 export const streakPets: StreakPet[] = [
-  { id: "cloud", name: "Nubia", shape: "cloud", cost: 0 },
-  { id: "circle", name: "Bola", shape: "circle", cost: 20 },
-  { id: "square", name: "Cubito", shape: "square", cost: 30 },
-  { id: "triangle", name: "Trino", shape: "triangle", cost: 40 },
-  { id: "star", name: "Estrella", shape: "star", cost: 50 },
-  { id: "hexagon", name: "Hexa", shape: "hexagon", cost: 60 },
-  { id: "diamond", name: "Rombi", shape: "diamond", cost: 70 },
-  { id: "heart", name: "Cora", shape: "heart", cost: 80 },
+  { id: "cloud", name: "Nubi", shape: "cloud", cost: 0 },
+  { id: "circle", name: "Círculo Amigable", shape: "circle", cost: 20 },
+  { id: "square", name: "Cuadrado Firme", shape: "square", cost: 30 },
+  { id: "triangle", name: "Triángulo Dinámico", shape: "triangle", cost: 40 },
+  { id: "star", name: "Estrella Premios", shape: "star", cost: 50 },
+  { id: "hexagon", name: "Hexágono Estructurado", shape: "hexagon", cost: 60 },
+  { id: "diamond", name: "Rombo Raro", shape: "diamond", cost: 70 },
+  { id: "heart", name: "Corazón Motivador", shape: "heart", cost: 80 },
 ];
 
 export type AccessoryCategory = "lentes" | "gorros" | "manos";

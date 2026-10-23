@@ -26,16 +26,22 @@ const shapePaths: Record<string, string> = {
   heart: "M50 88C20 66 6 48 6 32 6 16 18 6 30 6c9 0 16 5 20 12C54 11 61 6 70 6c12 0 24 10 24 26 0 16-14 34-44 56z",
 };
 
+const shapeColors: Record<string, string> = {
+  circle: "#f7941e",
+  square: "#43a047",
+  triangle: "#e53935",
+  star: "#fdd835",
+  hexagon: "#3b5bdb",
+  diamond: "#4dd0e1",
+  heart: "#ec407a",
+};
+
 function Face() {
   return (
     <g className="streak-face">
-      <circle cx="38" cy="46" r="4.5" fill="#2b2b3d" />
-      <circle cx="62" cy="46" r="4.5" fill="#2b2b3d" />
-      <circle cx="39.5" cy="44.5" r="1.4" fill="#fff" />
-      <circle cx="63.5" cy="44.5" r="1.4" fill="#fff" />
-      <path d="M42 58q8 8 16 0" stroke="#2b2b3d" strokeWidth="3" fill="none" strokeLinecap="round" />
-      <circle cx="30" cy="54" r="4" fill="#ffb3c1" opacity="0.7" />
-      <circle cx="70" cy="54" r="4" fill="#ffb3c1" opacity="0.7" />
+      <ellipse cx="40" cy="46" rx="3.4" ry="7" fill="#1f1f2e" />
+      <ellipse cx="60" cy="46" rx="3.4" ry="7" fill="#1f1f2e" />
+      <path d="M45 62q5 4 10 0" stroke="#1f1f2e" strokeWidth="2.6" fill="none" strokeLinecap="round" />
     </g>
   );
 }
@@ -61,10 +67,14 @@ export function StreakPetAvatar({
       aria-label="Tu mascota de racha"
     >
       {custom.pet === "cloud" ? (
-        <img src={cloudImg} width={size} height={size} alt="Nubia, la nube" className="streak-base" />
+        <img src={cloudImg} width={size} height={size} alt="Nubi, la nube" className="streak-base" />
       ) : (
         <svg viewBox="0 0 100 100" width={size} height={size} className="streak-base streak-shape" aria-hidden>
-          <path d={shapePaths[custom.pet]} className="streak-fill" />
+          <path
+            d={shapePaths[custom.pet]}
+            className="streak-fill"
+            style={custom.skin === "normal" ? { fill: shapeColors[custom.pet] } : undefined}
+          />
           <Face />
         </svg>
       )}
