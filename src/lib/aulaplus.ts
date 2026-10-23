@@ -22,6 +22,8 @@ export type Notebook = {
   name: string;
   subject: string;
   tone: string;
+  /** Mascota elegida al crear el cuaderno (id de streakPets). */
+  companion?: string;
   points: number;
   streak: number;
   notes: string;
