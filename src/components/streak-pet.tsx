@@ -41,6 +41,28 @@ const shapeColors: Record<string, string> = {
   diamond: "#4dd0e1",
   heart: "#ec407a",
 };
+const shapeDark: Record<string, string> = {
+  circle: "#d97a0e",
+  square: "#357a38",
+  triangle: "#b71c1c",
+  star: "#d4b106",
+  hexagon: "#2c4bb5",
+  diamond: "#26a3b8",
+  heart: "#c2185b",
+};
+
+/** Manitos y pies flotantes estilo boceto, como en la lámina oficial. */
+function Limbs({ pet }: { pet: string }) {
+  const c = shapeDark[pet] ?? "#888";
+  return (
+    <g fill={c} stroke="#1f1f2e" strokeWidth="2" strokeLinejoin="round">
+      <ellipse cx="2" cy="52" rx="7" ry="9" transform="rotate(-18 2 52)" />
+      <ellipse cx="98" cy="52" rx="7" ry="9" transform="rotate(18 98 52)" />
+      <ellipse cx="36" cy="103" rx="10" ry="6.5" />
+      <ellipse cx="64" cy="103" rx="10" ry="6.5" />
+    </g>
+  );
+}
 
 function Face() {
   return (
@@ -75,7 +97,8 @@ export function StreakPetAvatar({
       {custom.pet === "cloud" ? (
         <img src={cloudImg} width={size} height={size} alt="Nubi, la nube" className="streak-base" />
       ) : (
-        <svg viewBox="0 0 100 100" width={size} height={size} className="streak-base streak-shape" aria-hidden>
+        <svg viewBox="-12 -6 124 118" width={size} height={size} className="streak-base streak-shape" aria-hidden>
+          <Limbs pet={custom.pet} />
           <path
             d={shapePaths[custom.pet]}
             className="streak-fill"
