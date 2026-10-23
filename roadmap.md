@@ -17,4 +17,6 @@
 - [x] Fecha real del navegador en calendario y panel principal
 - [x] Logotipo oficial subido por la usuaria (libro y lápiz turquesa) en PWA, manifest y favicon
 - [x] Sistema de Mascotas de Racha: nube animada en dashboard, catálogo de 8 mascotas, armario (30 accesorios + 10 pieles), monedas de estudio, calificación automática + autoevaluación Fácil/Regular/Difícil
+- [x] Nubi (nube púrpura de la usuaria) como mascota principal en toda la app; mascotas 3D antiguas eliminadas
+- [x] Desbloqueo por puntos: Nubi/Círculo/Cuadrado/Triángulo libres; Estrella/Hexágono/Rombo/Corazón a 50/60/70/80 pts
 - [ ] Publicar todo en aulaplus.lovable.app (slug aula-pal-buddy ocupado; usuaria eligió aulaplus)
