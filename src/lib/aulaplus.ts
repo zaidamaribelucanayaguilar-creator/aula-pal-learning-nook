@@ -1,9 +1,4 @@
 export type Role = "student" | "teacher";
-export const petSpecies = ["monster", "cat", "owl", "dragon", "bear"] as const;
-export type PetSpecies = (typeof petSpecies)[number];
-export const petNames: Record<PetSpecies, string> = {
-  monster: "Milo", cat: "Cosmo", owl: "Blu", dragon: "Lumi", bear: "Coco",
-};
 export type Evaluation = "Perfecto" | "Bien" | "Necesita Repaso";
 export const evaluationPoints: Record<Evaluation, number> = {
   Perfecto: 2,
@@ -27,8 +22,6 @@ export type Notebook = {
   name: string;
   subject: string;
   tone: string;
-  pet: string;
-  species: PetSpecies;
   points: number;
   streak: number;
   notes: string;
@@ -53,8 +46,6 @@ export const initialWorkspace: Workspace = {
       name: "Matemáticas",
       subject: "Números que cuentan historias",
       tone: "mint",
-      pet: "Milo",
-      species: "monster",
       points: 24,
       streak: 5,
       notes:
@@ -66,8 +57,6 @@ export const initialWorkspace: Workspace = {
       name: "Ciencias Naturales",
       subject: "Un mundo por descubrir",
       tone: "sky",
-      pet: "Cosmo",
-      species: "cat",
       points: 16,
       streak: 3,
       notes:
@@ -79,8 +68,6 @@ export const initialWorkspace: Workspace = {
       name: "Comunicación",
       subject: "Cada palabra es una aventura",
       tone: "peach",
-      pet: "Blu",
-      species: "owl",
       points: 32,
       streak: 7,
       notes:
@@ -92,8 +79,6 @@ export const initialWorkspace: Workspace = {
       name: "Historia",
       subject: "Viajes a través del tiempo",
       tone: "lilac",
-      pet: "Lumi",
-      species: "dragon",
       points: 12,
       streak: 2,
       notes:
@@ -102,7 +87,7 @@ export const initialWorkspace: Workspace = {
     },
     {
       id: "art", name: "Arte y Creatividad", subject: "Ideas que toman color",
-      tone: "peach", pet: "Coco", species: "bear", points: 8, streak: 2,
+      tone: "peach", points: 8, streak: 2,
       notes: "Los colores primarios son rojo, amarillo y azul. Al mezclarlos obtenemos colores secundarios.",
       tasks: [{ id: "art1", title: "Crear un dibujo con colores primarios", done: false }],
     },
@@ -189,11 +174,12 @@ export function isValidEmail(email: string) {
 // ===== Sistema de Mascotas de Racha y Gamificación =====
 export type StreakPetId = "cloud" | "circle" | "square" | "triangle" | "star" | "hexagon" | "diamond" | "heart";
 export type StreakPet = { id: StreakPetId; name: string; shape: string; cost: number };
+/** cost = puntos de aprendizaje necesarios para desbloquear (0 = libre desde el nivel 1). */
 export const streakPets: StreakPet[] = [
   { id: "cloud", name: "Nubi", shape: "cloud", cost: 0 },
-  { id: "circle", name: "Círculo Amigable", shape: "circle", cost: 20 },
-  { id: "square", name: "Cuadrado Firme", shape: "square", cost: 30 },
-  { id: "triangle", name: "Triángulo Dinámico", shape: "triangle", cost: 40 },
+  { id: "circle", name: "Círculo Amigable", shape: "circle", cost: 0 },
+  { id: "square", name: "Cuadrado Firme", shape: "square", cost: 0 },
+  { id: "triangle", name: "Triángulo Dinámico", shape: "triangle", cost: 0 },
   { id: "star", name: "Estrella Premios", shape: "star", cost: 50 },
   { id: "hexagon", name: "Hexágono Estructurado", shape: "hexagon", cost: 60 },
   { id: "diamond", name: "Rombo Raro", shape: "diamond", cost: 70 },
@@ -253,9 +239,17 @@ export type PetCustomization = { pet: StreakPetId; skin: string; accessories: st
 export type Wallet = { coins: number; owned: string[]; custom: PetCustomization };
 export const initialWallet: Wallet = {
   coins: 15,
-  owned: ["cloud", "normal"],
+  owned: ["cloud", "circle", "square", "triangle", "normal"],
   custom: { pet: "cloud", skin: "normal", accessories: [] },
 };
+
+/** Desbloquea una mascota con puntos de aprendizaje acumulados (sin gastar monedas). */
+export function unlockPet(wallet: Wallet, id: StreakPetId, totalPoints: number): Wallet {
+  const pet = streakPets.find((p) => p.id === id);
+  if (!pet || wallet.owned.includes(id)) return wallet;
+  if (pet.cost > 0 && totalPoints < pet.cost) return wallet;
+  return { ...wallet, owned: [...wallet.owned, id] };
+}
 
 export function itemCost(id: string): number {
   return (

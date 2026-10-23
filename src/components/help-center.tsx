@@ -3,8 +3,8 @@ import { Search, BookOpen, HelpCircle, MessageCircleQuestion, Send } from "lucid
 import { Button } from "@/components/ui/button";
 
 const faqs = [
-  { q: "¿Cómo crece mi mascota?", a: "Cada cuaderno tiene su propia mascota. Perfecto suma 2 puntos, Bien suma 1 y Necesita Repaso 0. Cada 10 puntos sube de nivel.", who: "Estudiantes" },
-  { q: "¿Cómo creo un cuaderno?", a: "En Mis cuadernos pulsa “+ Crear Nuevo Cuaderno”, elige nombre, mascota y color.", who: "Estudiantes" },
+  { q: "¿Cómo desbloqueo mascotas?", a: "Nubi, Círculo, Cuadrado y Triángulo están contigo desde el nivel 1. Estrella, Hexágono, Rombo y Corazón se desbloquean acumulando puntos de aprendizaje (50, 60, 70 y 80). Se ganan estudiando, sin dinero real.", who: "Estudiantes" },
+  { q: "¿Cómo creo un cuaderno?", a: "En Mis cuadernos pulsa “+ Crear Nuevo Cuaderno”, elige nombre y color.", who: "Estudiantes" },
   { q: "¿Puedo subir archivos al tutor?", a: "Sí. En el chat pulsa “Archivo” y sube PDF, Word, Excel, PowerPoint o texto. Milo los lee y los guarda en tus apuntes.", who: "Estudiantes" },
   { q: "¿Qué es Estudio+?", a: "Una pestaña del cuaderno que crea mapas mentales, cuestionarios, tablas y resúmenes en audio a partir de tus apuntes.", who: "Estudiantes" },
   { q: "¿Cómo creo una clase?", a: "En Modo Profesor usa “Crear Nueva Clase” arriba y luego “Gestionar estudiantes” para añadir alumnos.", who: "Profesores" },

@@ -11,10 +11,16 @@ import {
   equipPet,
   equipSkin,
   toggleAccessory,
+  unlockPet,
   type PetCustomization,
   type StreakPetId,
   type Wallet,
 } from "@/lib/aulaplus";
+
+/** Nubi sin accesorios, para tarjetas y rincones de la app. */
+export function NubiAvatar({ size = 80, animated = false }: { size?: number; animated?: boolean }) {
+  return <StreakPetAvatar custom={{ pet: "cloud", skin: "normal", accessories: [] }} size={size} animated={animated} />;
+}
 
 const shapePaths: Record<string, string> = {
   circle: "M50 6a44 44 0 1 1 0 88 44 44 0 0 1 0-88z",
@@ -92,7 +98,7 @@ const wardrobeTabs = [
   { id: "pieles", label: "Pieles", icon: Palette },
 ] as const;
 
-export function Wardrobe({ wallet, onChange }: { wallet: Wallet; onChange: (w: Wallet) => void }) {
+export function Wardrobe({ wallet, onChange, totalPoints = 0 }: { wallet: Wallet; onChange: (w: Wallet) => void; totalPoints?: number }) {
   const [tab, setTab] = useState<(typeof wardrobeTabs)[number]["id"]>("lentes");
   const pet = streakPets.find((p) => p.id === wallet.custom.pet)!;
 
@@ -113,16 +119,25 @@ export function Wardrobe({ wallet, onChange }: { wallet: Wallet; onChange: (w: W
 
       <div className="wardrobe-section">
         <h4>Elige tu mascota</h4>
+        <p className="text-muted-foreground text-sm" style={{ marginTop: -6 }}>
+          Nubi, Círculo, Cuadrado y Triángulo te acompañan desde el nivel 1. Estrella, Hexágono, Rombo y Corazón se desbloquean acumulando puntos de aprendizaje (50, 60, 70 y 80). ¡Sin dinero real, solo tu esfuerzo!
+        </p>
         <div className="wardrobe-pets">
           {streakPets.map((p) => {
             const owned = wallet.owned.includes(p.id);
             const active = wallet.custom.pet === p.id;
+            const unlockable = !owned && p.cost > 0 && totalPoints >= p.cost;
             return (
               <button
                 key={p.id}
                 type="button"
                 className={`wardrobe-item ${active ? "equipped" : ""}`}
-                onClick={() => (owned ? onChange(equipPet(wallet, p.id as StreakPetId)) : buy(p.id))}
+                disabled={!owned && !unlockable}
+                onClick={() => {
+                  if (owned) return onChange(equipPet(wallet, p.id as StreakPetId));
+                  const next = unlockPet(wallet, p.id as StreakPetId, totalPoints);
+                  if (next !== wallet) onChange(equipPet(next, p.id as StreakPetId));
+                }}
               >
                 <StreakPetAvatar custom={{ pet: p.id, skin: "normal", accessories: [] }} size={56} animated={false} />
                 <small>{p.name}</small>
@@ -130,8 +145,10 @@ export function Wardrobe({ wallet, onChange }: { wallet: Wallet; onChange: (w: W
                   <span className="wardrobe-tag on"><Check size={11} /> Equipada</span>
                 ) : owned ? (
                   <span className="wardrobe-tag">Usar</span>
+                ) : unlockable ? (
+                  <span className="wardrobe-tag on">¡Desbloquear!</span>
                 ) : (
-                  <span className="wardrobe-tag lock"><Lock size={11} /> {p.cost}</span>
+                  <span className="wardrobe-tag lock"><Lock size={11} /> {p.cost} pts</span>
                 )}
               </button>
             );

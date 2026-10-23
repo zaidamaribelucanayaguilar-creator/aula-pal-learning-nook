@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { evaluate, makeGroups, initialWorkspace, petSpecies, createClassroom, createInitialClassrooms, updateClassWorkspace } from "@/lib/aulaplus";
+import { evaluate, makeGroups, createClassroom, createInitialClassrooms, updateClassWorkspace } from "@/lib/aulaplus";
 describe("Notebook evaluation", () => {
   it("Perfecto adds exactly 2 points", () => expect(evaluate(10, "Perfecto")).toBe(12));
   it("Bien adds exactly 1 point", () => expect(evaluate(10, "Bien")).toBe(11));
@@ -14,12 +14,6 @@ describe("Class groups", () => {
       expect(groups.every((g) => g.length <= size)).toBe(true);
       expect(groups[0]?.length).toBe(size);
     });
-});
-describe("Distinct notebook pets", () => {
-  it("offers five species with a different pet in each initial notebook", () => {
-    expect(petSpecies).toEqual(["monster", "cat", "owl", "dragon", "bear"]);
-    expect(new Set(initialWorkspace.notebooks.map((n) => n.species)).size).toBe(5);
-  });
 });
 describe("Independent classrooms", () => {
   it("creates a named class with an empty roster", () => {
@@ -83,12 +77,19 @@ describe("inicio limpio y login", () => {
   });
 });
 
-import { streakPets, accessories, skins, initialWallet, canBuy, buyItem, equipPet, toggleAccessory, sessionReward, nextReviewDays } from "@/lib/aulaplus";
+import { streakPets, accessories, skins, initialWallet, canBuy, buyItem, equipPet, unlockPet, toggleAccessory, sessionReward, nextReviewDays } from "@/lib/aulaplus";
 describe("Sistema de mascotas de racha", () => {
-  it("ofrece 8 mascotas: nube gratis y 7 formas con costo", () => {
+  it("ofrece 8 mascotas: 4 libres desde el nivel 1 y 4 por puntos (50/60/70/80)", () => {
     expect(streakPets).toHaveLength(8);
-    expect(streakPets[0]).toMatchObject({ id: "cloud", cost: 0 });
-    expect(streakPets.slice(1).every((p) => p.cost > 0)).toBe(true);
+    expect(streakPets.filter((p) => p.cost === 0).map((p) => p.id)).toEqual(["cloud", "circle", "square", "triangle"]);
+    expect(streakPets.filter((p) => p.cost > 0).map((p) => p.cost)).toEqual([50, 60, 70, 80]);
+  });
+  it("desbloquea mascotas especiales solo con puntos suficientes, sin gastar monedas", () => {
+    expect(unlockPet(initialWallet, "star", 49)).toBe(initialWallet);
+    const w = unlockPet(initialWallet, "star", 50);
+    expect(w.owned).toContain("star");
+    expect(w.coins).toBe(initialWallet.coins);
+    expect(unlockPet(initialWallet, "heart", 80).owned).toContain("heart");
   });
   it("tiene 30 accesorios en 3 categorías y 10 pieles", () => {
     expect(accessories).toHaveLength(30);
@@ -96,13 +97,13 @@ describe("Sistema de mascotas de racha", () => {
       expect(accessories.filter((a) => a.category === cat)).toHaveLength(10);
     expect(skins).toHaveLength(10);
   });
-  it("compra solo con monedas suficientes y descuenta el costo", () => {
-    expect(canBuy(initialWallet, "heart")).toBe(false);
+  it("compra accesorios solo con monedas suficientes y descuenta el costo", () => {
+    expect(canBuy(initialWallet, "gor-corona")).toBe(false);
     const rich = { ...initialWallet, coins: 100 };
-    const bought = buyItem(rich, "star");
-    expect(bought.coins).toBe(50);
-    expect(bought.owned).toContain("star");
-    expect(buyItem(bought, "star")).toBe(bought);
+    const bought = buyItem(rich, "gor-corona");
+    expect(bought.coins).toBe(75);
+    expect(bought.owned).toContain("gor-corona");
+    expect(buyItem(bought, "gor-corona")).toBe(bought);
   });
   it("no equipa mascotas sin desbloquear", () => {
     expect(equipPet(initialWallet, "heart")).toBe(initialWallet);

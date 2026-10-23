@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Pet } from "@/components/pet";
+import { NubiAvatar } from "@/components/streak-pet";
 import { isValidEmail } from "@/lib/aulaplus";
 
 export function LoginScreen({ onDone }: { onDone: (name: string, email: string) => void }) {
@@ -12,7 +12,7 @@ export function LoginScreen({ onDone }: { onDone: (name: string, email: string) 
     <div className="login-screen">
       <div className="login-card">
         <div className="login-pets">
-          <Pet species="dragon" /><Pet species="monster" /><Pet species="owl" />
+          <NubiAvatar size={110} animated />
         </div>
         <h1>¡Bienvenido a AulaPlus!</h1>
         <p className="text-muted-foreground">Crea tu espacio para empezar la aventura.</p>
