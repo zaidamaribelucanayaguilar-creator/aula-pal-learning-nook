@@ -36,7 +36,7 @@ export type TutorRequestBody = {
 };
 
 export function handleTutorRequest(request: Request, body: TutorRequestBody) {
-  const apiKey = process.env.LOVABLE_API_KEY;
+  const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) {
     return new Response(JSON.stringify({ error: "La IA no está configurada todavía." }), {
       status: 500,
