@@ -19,7 +19,7 @@
 - [x] Sistema de Mascotas de Racha: nube animada en dashboard, catálogo de 8 mascotas, armario (30 accesorios + 10 pieles), monedas de estudio, calificación automática + autoevaluación Fácil/Regular/Difícil
 - [x] Nubi (nube púrpura de la usuaria) como mascota principal en toda la app; mascotas 3D antiguas eliminadas
 - [x] Desbloqueo por puntos: Nubi/Círculo/Cuadrado/Triángulo libres; Estrella/Hexágono/Rombo/Corazón a 50/60/70/80 pts
-- [ ] Español 100% en toda la interfaz (menús, botones, errores)
-- [ ] Mascotas de cuerpo completo (manos y pies flotantes) en tarjetas de cuaderno y panel lateral
-- [ ] Verificar persistencia localStorage y actualizar FAQ "¿Se guardan mis avances?"
+- [x] Español 100% en toda la interfaz (menús, botones, errores)
+- [x] Mascotas de cuerpo completo (manos y pies flotantes) en tarjetas de cuaderno y panel lateral
+- [x] Persistencia localStorage verificada (cuaderno sobrevive recarga) y FAQ actualizada
 - [ ] Publicar todo en aulaplus.lovable.app (slug aula-pal-buddy ocupado; usuaria eligió aulaplus)

@@ -853,7 +853,7 @@ export const PromptInput = ({
     <>
       <input
         accept={accept}
-        aria-label="Upload files"
+        aria-label="Subir archivos"
         className="hidden"
         multiple={multiple}
         onChange={handleChange}
@@ -1153,7 +1153,7 @@ export const PromptInputSubmit = ({
 
   return (
     <InputGroupButton
-      aria-label={isGenerating ? "Stop" : "Submit"}
+      aria-label={isGenerating ? "Detener" : "Enviar"}
       className={cn(className)}
       onClick={handleClick}
       size={size}
