@@ -219,7 +219,7 @@ export const MessageBranchPrevious = ({ children, ...props }: MessageBranchPrevi
 
   return (
     <Button
-      aria-label="Previous branch"
+      aria-label="Rama anterior"
       disabled={totalBranches <= 1}
       onClick={goToPrevious}
       size="icon-sm"
@@ -239,7 +239,7 @@ export const MessageBranchNext = ({ children, ...props }: MessageBranchNextProps
 
   return (
     <Button
-      aria-label="Next branch"
+      aria-label="Rama siguiente"
       disabled={totalBranches <= 1}
       onClick={goToNext}
       size="icon-sm"
