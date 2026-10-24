@@ -66,7 +66,6 @@ export function handleTutorRequest(request: Request, body: TutorRequestBody) {
 
   const result = streamText({
     model: provider.responses(MODEL),
-    system: undefined,
     messages,
     abortSignal: request.signal,
     providerOptions: {

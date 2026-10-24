@@ -47,12 +47,40 @@ export function StudyChat({ notebook, addNotes, userName = "" }: { notebook: Not
     push(withUser);
     setLastQuestion(text);
     setThinking(true);
-    await new Promise((r) => setTimeout(r, 450));
-    let reply = tutorReply(text, notebook.notes, notebook.name);
-    if (first && /^¡Hola!/.test(reply)) reply = reply.replace("¡Hola!", `¡Hola, ${first}!`);
-    const offer = reply.includes(WEB_OFFER);
-    push([...withUser, { id: crypto.randomUUID(), role: "assistant", text: reply, chips: offer ? [] : followUps(text, notebook.name), ...(offer ? { webQuery: text } : {}) }]);
-    setThinking(false);
+    try {
+      const res = await fetch("/api/public/tutor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: text,
+          notebook: notebook.name,
+          notes: notebook.notes,
+          history: messages.slice(-10).map((m) => ({ role: m.role, text: m.text })),
+        }),
+      });
+      if (!res.ok || !res.body) throw new Error(`tutor ${res.status}`);
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      const id = crypto.randomUUID();
+      let reply = "";
+      push([...withUser, { id, role: "assistant", text: "…" }]);
+      setThinking(false);
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        reply += decoder.decode(value, { stream: true });
+        const current = reply;
+        setMessages((list) => list.map((m) => (m.id === id ? { ...m, text: current } : m)));
+      }
+      push([...withUser, { id, role: "assistant", text: reply, chips: followUps(text, notebook.name) }]);
+    } catch {
+      // Respaldo local si la IA no está disponible
+      let reply = tutorReply(text, notebook.notes, notebook.name);
+      if (first && /^¡Hola!/.test(reply)) reply = reply.replace("¡Hola!", `¡Hola, ${first}!`);
+      const offer = reply.includes(WEB_OFFER);
+      push([...withUser, { id: crypto.randomUUID(), role: "assistant", text: reply, chips: offer ? [] : followUps(text, notebook.name), ...(offer ? { webQuery: text } : {}) }]);
+      setThinking(false);
+    }
   }
 
   async function searchWeb(query: string) {
