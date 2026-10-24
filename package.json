@@ -17,7 +17,7 @@
     "rolldown": "1.2.1"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^4.0.91",
+    "@ai-sdk/openai": "^4.0.101",
     "@ai-sdk/openai-compatible": "^3.0.67",
     "@ai-sdk/react": "^4.0.131",
     "@hookform/resolvers": "^5.2.2",
