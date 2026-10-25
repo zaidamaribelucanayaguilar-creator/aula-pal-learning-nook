@@ -84,3 +84,5 @@ export function handleTutorRequest(request: Request, body: TutorRequestBody) {
     { "Content-Type": "text/plain; charset=utf-8" },
   );
 }
+
+// Tutor IA: verificado con ai@7 + @ai-sdk/openai@4 (override @ai-sdk/provider 4.0.33).
