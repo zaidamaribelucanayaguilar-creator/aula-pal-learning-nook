@@ -50,8 +50,6 @@ export function handleTutorRequest(request: Request, body: TutorRequestBody) {
     : `Cuaderno activo: "${body.notebook}". El estudiante aún no tiene apuntes en este cuaderno.`;
 
   const messages: ModelMessage[] = [
-    { role: "system", content: SYSTEM_PROMPT },
-    { role: "system", content: contextMessage },
     ...(body.history ?? []).slice(-10).map((m): ModelMessage => ({ role: m.role, content: m.text.slice(0, 2000) })),
     { role: "user", content: body.question.slice(0, 2000) },
   ];
@@ -66,6 +64,7 @@ export function handleTutorRequest(request: Request, body: TutorRequestBody) {
 
   const result = streamText({
     model: provider.responses(MODEL),
+    instructions: `${SYSTEM_PROMPT}\n\n${contextMessage}`,
     messages,
     abortSignal: request.signal,
     providerOptions: {
