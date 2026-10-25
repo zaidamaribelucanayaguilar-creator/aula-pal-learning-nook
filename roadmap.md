@@ -22,5 +22,6 @@
 - [x] Español 100% en toda la interfaz (menús, botones, errores)
 - [x] Mascotas de cuerpo completo (manos y pies flotantes) en tarjetas de cuaderno y panel lateral
 - [x] Persistencia localStorage verificada (cuaderno sobrevive recarga) y FAQ actualizada
-- [ ] Tutor IA real (Lovable AI Gateway): system prompt experto, contexto del cuaderno activo, respuestas Markdown en streaming
+- [x] Tutor IA real (Lovable AI Gateway): system prompt experto, contexto del cuaderno activo, respuestas Markdown en streaming
+- [ ] Limpieza de texto importado: decodificar entidades HTML (&#8211; etc.), quitar basura de navegación (Share/Compartir/menús), que tutor y resúmenes lean contenido limpio
 - [ ] Publicar todo en aulaplus-app.lovable.app (aula-pal-buddy y aulaplus ocupados; usuaria eligió aulaplus-app)
