@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import type { Notebook } from "@/lib/aulaplus";
 import { fetchSource } from "@/lib/fetch-source.functions";
 import { readStudyFile } from "@/lib/file-reader";
+import { cleanImportedText } from "@/lib/clean-text";
 import { digestSource } from "@/lib/tutor";
 
 const md = (s: string) => s.split(/\*\*(.+?)\*\*/g).map((p, i) => (i % 2 ? <strong key={i}>{p}</strong> : p));
@@ -15,7 +16,8 @@ export function SourcesPanel({ notebook: n, update }: { notebook: Notebook; upda
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState<string | null>(null);
   const sources = n.sources ?? [];
-  const add = (title: string, kind: "link" | "texto" | "archivo", body: string, link?: string) => {
+  const add = (title: string, kind: "link" | "texto" | "archivo", rawBody: string, link?: string) => {
+    const body = cleanImportedText(rawBody);
     const d = digestSource(body);
     const id = crypto.randomUUID();
     update({

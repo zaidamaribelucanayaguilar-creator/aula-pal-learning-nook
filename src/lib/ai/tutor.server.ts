@@ -1,5 +1,6 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { streamText, type ModelMessage } from "ai";
+import { cleanImportedText } from "@/lib/clean-text";
 import {
   createLovableAiGatewayRunIdFetch,
   getLovableAiGatewayRunId,
@@ -44,7 +45,7 @@ export function handleTutorRequest(request: Request, body: TutorRequestBody) {
     });
   }
 
-  const notes = body.notes.slice(0, 12000).trim();
+  const notes = cleanImportedText(body.notes).slice(0, 12000);
   const contextMessage = notes
     ? `Cuaderno activo: "${body.notebook}".\n\nAPUNTES DEL CUADERNO (contexto principal para tu respuesta):\n"""\n${notes}\n"""`
     : `Cuaderno activo: "${body.notebook}". El estudiante aún no tiene apuntes en este cuaderno.`;
