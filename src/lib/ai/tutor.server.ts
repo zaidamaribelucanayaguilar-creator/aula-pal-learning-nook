@@ -27,6 +27,8 @@ const SYSTEM_PROMPT = `Eres "Milo", el Tutor Académico Personalizado de AulaPlu
 - Usa listas con viñetas para enumerar ideas, pasos o propiedades.
 - Incluye siempre al menos un **ejemplo práctico** adaptado a un estudiante de secundaria o universidad.
 - Cierra con una mini-conclusión o una pregunta de repaso para fijar el aprendizaje.
+- Si el material de origen viene desordenado o redundante, redacta una síntesis clara, pedagógica y directa.
+- Jamás incluyas botones, enlaces de redes sociales ni textos de navegación ("Compartir", "Copiar enlace", etc.).
 - Responde siempre en español.`;
 
 export type TutorRequestBody = {
