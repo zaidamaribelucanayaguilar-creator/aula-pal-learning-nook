@@ -24,4 +24,6 @@
 - [x] Persistencia localStorage verificada (cuaderno sobrevive recarga) y FAQ actualizada
 - [x] Tutor IA real (Lovable AI Gateway): system prompt experto, contexto del cuaderno activo, respuestas Markdown en streaming
 - [x] Limpieza de texto importado: decodificar entidades HTML (&#8211; etc.), quitar basura de navegación (Share/Compartir/menús), que tutor y resúmenes lean contenido limpio
+- [ ] i18n global real: toda la interfaz (menús, tarjetas, modales, botones) cambia al idioma elegido
+- [ ] Importación masiva de estudiantes (Excel/CSV/Word/TXT) en gestión de equipos del profesor
 - [ ] Publicar todo en aulaplus-app.lovable.app (aula-pal-buddy y aulaplus ocupados; usuaria eligió aulaplus-app)
