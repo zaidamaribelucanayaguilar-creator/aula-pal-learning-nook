@@ -28,7 +28,7 @@ export function decodeHtmlEntities(input: string): string {
 // Frases típicas de navegación/compartir que no aportan contenido educativo.
 const JUNK_PATTERNS: RegExp[] = [
   /^(share|compartir|compartir en|tweet|twittear|pin it|guardar en pinterest)\b/i,
-  /\b(compartir|share)\s+(en|on)?\s*(facebook|twitter|x\.com|linkedin|whatsapp|telegram|pinterest|reddit|correo|email)\b/i,
+  /^(compartir|share)\b.{0,40}\b(facebook|twitter|x\.com|linkedin|whatsapp|telegram|pinterest|reddit|correo|email)\b/i,
   /^(copiar enlace|copy link|enlace copiado|link copied)\b/i,
   /^(suscr[ií]bete|suscripci[oó]n|newsletter|reg[ií]strate|inicia sesi[oó]n|iniciar sesi[oó]n|crea tu cuenta|log in|sign up)\b/i,
   /^(men[uú]|menu|buscar|search|ir al contenido|skip to content|navegaci[oó]n)\b/i,

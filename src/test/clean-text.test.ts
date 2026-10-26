@@ -26,6 +26,10 @@ describe("stripWebJunk", () => {
     const texto = "La fotosíntesis usa luz solar.\nLas plantas producen glucosa y oxígeno.";
     expect(stripWebJunk(texto)).toBe(texto);
   });
+  it("no borra una línea educativa que mencione compartir en redes", () => {
+    const linea = "El corazón bombea sangre. Compartir en Facebook. Copiar enlace. Las aurículas reciben la sangre.";
+    expect(stripWebJunk(linea)).toBe(linea);
+  });
 });
 
 describe("cleanImportedText", () => {
