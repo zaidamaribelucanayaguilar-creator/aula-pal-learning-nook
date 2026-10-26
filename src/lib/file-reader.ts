@@ -3,7 +3,7 @@ import { cleanImportedText } from "@/lib/clean-text";
 
 export type ReadResult = { name: string; kind: string; text: string; note?: string };
 
-export async function readStudyFile(file: File): Promise<ReadResult> {
+async function readStudyFileRaw(file: File): Promise<ReadResult> {
   const name = file.name;
   const ext = name.split(".").pop()?.toLowerCase() ?? "";
   const kind = ext.toUpperCase() || "Archivo";
@@ -55,8 +55,7 @@ export async function readStudyFile(file: File): Promise<ReadResult> {
 }
 
 // Envoltura: todo texto extraído pasa por la limpieza (entidades HTML y basura web).
-const originalRead = readStudyFile;
-export async function readStudyFileClean(file: File): Promise<ReadResult> {
-  const r = await originalRead(file);
+export async function readStudyFile(file: File): Promise<ReadResult> {
+  const r = await readStudyFileRaw(file);
   return r.text ? { ...r, text: cleanImportedText(r.text) } : r;
 }
