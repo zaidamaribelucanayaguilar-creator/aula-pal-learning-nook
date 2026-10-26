@@ -1,4 +1,5 @@
 // Tutor local (sin IA externa): responde conocimiento general y usa los apuntes como apoyo.
+import { cleanImportedText } from "@/lib/clean-text";
 const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
 export function solveMath(question: string): { expr: string; result: number } | null {
