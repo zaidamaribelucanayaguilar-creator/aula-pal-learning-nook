@@ -26,11 +26,15 @@ describe("stripWebJunk", () => {
     const texto = "La fotosíntesis usa luz solar.\nLas plantas producen glucosa y oxígeno.";
     expect(stripWebJunk(texto)).toBe(texto);
   });
+  it("no borra una línea educativa que mencione compartir en redes", () => {
+    const linea = "El corazón bombea sangre. Compartir en Facebook. Copiar enlace. Las aurículas reciben la sangre.";
+    expect(stripWebJunk(linea)).toBe(linea);
+  });
 });
 
 describe("cleanImportedText", () => {
   it("limpia entidades y basura web en un solo paso", () => {
     const sucio = "Anatom&#237;a del coraz&#243;n.\nCompartir en LinkedIn\n\n\n\nLas cavidades: aur&#237;culas y ventr&#237;culos.";
-    expect(cleanImportedText(sucio)).toBe("Anatomía del corazón.\n\nLas cavidades: aurículas y ventrículos.");
+    expect(cleanImportedText(sucio)).toBe("Anatomía del corazón.\nLas cavidades: aurículas y ventrículos.");
   });
 });

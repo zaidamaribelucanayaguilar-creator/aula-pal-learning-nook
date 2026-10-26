@@ -1,7 +1,9 @@
-// Lectura local de archivos (sin servicios externos). Devuelve texto plano.
+// Lectura local de archivos (sin servicios externos). Devuelve texto plano limpio.
+import { cleanImportedText } from "@/lib/clean-text";
+
 export type ReadResult = { name: string; kind: string; text: string; note?: string };
 
-export async function readStudyFile(file: File): Promise<ReadResult> {
+async function readStudyFileRaw(file: File): Promise<ReadResult> {
   const name = file.name;
   const ext = name.split(".").pop()?.toLowerCase() ?? "";
   const kind = ext.toUpperCase() || "Archivo";
@@ -50,4 +52,10 @@ export async function readStudyFile(file: File): Promise<ReadResult> {
   } catch {
     return { name, kind, text: "", note: "No pude leer este archivo. ¿Está dañado o protegido?" };
   }
+}
+
+// Envoltura: todo texto extraído pasa por la limpieza (entidades HTML y basura web).
+export async function readStudyFile(file: File): Promise<ReadResult> {
+  const r = await readStudyFileRaw(file);
+  return r.text ? { ...r, text: cleanImportedText(r.text) } : r;
 }

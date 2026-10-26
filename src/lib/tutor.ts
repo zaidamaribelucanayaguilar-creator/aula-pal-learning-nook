@@ -1,4 +1,5 @@
 // Tutor local (sin IA externa): responde conocimiento general y usa los apuntes como apoyo.
+import { cleanImportedText } from "@/lib/clean-text";
 const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
 export function solveMath(question: string): { expr: string; result: number } | null {
@@ -97,7 +98,7 @@ export async function webSearch(query: string): Promise<{ title: string; text: s
     if (!key) return null;
     const p = await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(key)}`).then((r) => r.json());
     if (!p?.extract) return null;
-    return { title: p.title, text: p.extract, url: p.content_urls?.desktop?.page ?? `https://es.wikipedia.org/wiki/${key}` };
+    return { title: p.title, text: cleanImportedText(p.extract), url: p.content_urls?.desktop?.page ?? `https://es.wikipedia.org/wiki/${key}` };
   } catch {
     return null;
   }
@@ -112,7 +113,7 @@ export async function webSearchMany(query: string, limit = 3): Promise<WebHit[]>
     const hits = await Promise.all(keys.map(async (key) => {
       try {
         const p = await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(key)}`).then((r) => r.json());
-        return p?.extract ? { title: p.title as string, text: p.extract as string, url: (p.content_urls?.desktop?.page as string) ?? `https://es.wikipedia.org/wiki/${key}` } : null;
+        return p?.extract ? { title: p.title as string, text: cleanImportedText(p.extract as string), url: (p.content_urls?.desktop?.page as string) ?? `https://es.wikipedia.org/wiki/${key}` } : null;
       } catch { return null; }
     }));
     return hits.filter((h): h is WebHit => !!h);
